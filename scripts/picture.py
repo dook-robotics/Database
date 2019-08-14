@@ -1,4 +1,22 @@
-## Author: Mikian Musser
+## picture.py ##
+## Take a picture on the pi and store it on a USB ##
+#
+# Authors:
+#   Mikian Musser - https://github.com/mm909
+#   Eric Becerril-Blas - https://github.com/lordbecerril
+#   Zoyla O - https://github.com/ZoylaO
+#   Austin Janushan - https://github.com/Janushan-Austin
+#   Giovanny Vazquez - https://github.com/giovannyVazquez
+#
+# Organization:
+#   Dook Robotics - https://github.com/dook-robotics
+#
+# Usage:
+#   python picture.py
+#
+# Todo:
+#   Take in the file storage path as CLA
+#
 
 from picamera import PiCamera
 from pynput.keyboard import Key, Listener
