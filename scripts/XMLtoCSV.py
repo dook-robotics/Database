@@ -35,5 +35,5 @@ def main():
         xml_df.to_csv(('images/' + folder + '_labels.csv'), index=None)
         print('Successfully converted xml to csv.')
 
-xml_df = xml_to_csv("C:/Users/bobar/Documents/GitHub/Database/reduced/xml/trippleGrid/")
-xml_df.to_csv(('C:/Users/bobar/Documents/GitHub/Database/reduced/csv/trippleGrid.csv'), index=None)
+xml_df = xml_to_csv("D:/Database/reduced/train")
+xml_df.to_csv(('D:/Database/reduced/train.csv'), index=None)
