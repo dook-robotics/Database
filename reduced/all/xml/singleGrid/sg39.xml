@@ -1,0 +1,26 @@
+<annotation>
+	<folder>singleGrid</folder>
+	<filename>39.jpg</filename>
+	<path>C:\Users\bobar\Documents\GitHub\Database\reduced\singleGrid\39.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>540</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>poop</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>787</xmin>
+			<ymin>171</ymin>
+			<xmax>886</xmax>
+			<ymax>249</ymax>
+		</bndbox>
+	</object>
+</annotation>
