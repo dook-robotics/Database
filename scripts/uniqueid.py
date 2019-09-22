@@ -20,6 +20,8 @@ for file in images:
             dst = dst.replace(name, "t" + name)
         if(folder == "trippleGrid"):
             dst = dst.replace(name, "tg" + name)
+        if(folder == "trippleRocks"):
+            dst = dst.replace(name, "tr" + name)
         os.rename(src, dst)
         count = count + 1
         print(dst)

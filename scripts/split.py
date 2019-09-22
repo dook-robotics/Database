@@ -2,44 +2,34 @@ import sys
 import glob
 import random
 import shutil
+import math
 
-def getList():
-    list = []
-    for i in range(40):
-        x = random.randint(0, totalImage-1)
-        if not x in list:
-            list.append(x)
-    return list
+split = .2
 
-# Dirs
-trainImages = glob.glob("C:/Users/bobar/Documents/GitHub/Database/reduced/train/*.jpg")
-trainXML = glob.glob("C:/Users/bobar/Documents/GitHub/Database/reduced/train/*.xml")
-test = glob.glob("C:/Users/bobar/Documents/GitHub/Database/reduced/test/*")
-
-print("\nImages in test folder  :", int(len(test)/2))
-print("Images in train folder :", len(trainImages))
-print("XML in train folder    :", len(trainXML))
+test = glob.glob("D:/Database/reduced/test/*")
 
 count = 0
 for file in test:
     shutil.move(test[count], test[count].replace('test', 'train'))
     count = count + 1
+
+trainImages = glob.glob("D:/Database/reduced/train/*.jpg")
+trainXML = glob.glob("D:/Database/reduced/train/*.xml")
+
 print("\nImages moved from test to train:", count)
+print("\nImages in test folder  :", int(len(test)/2))
+print("Images in train folder :", len(trainImages))
+print("XML in train folder    :", len(trainXML))
 
-totalImage = len(trainImages)
-listLen = 0
-list = []
-
-while listLen != 40:
-    list = getList()
-    listLen = len(list)
-
-list.sort(reverse=True)
-print("\nList size:", listLen)
+testSize = (int(split * len(trainImages)))
 
 count = 0
-for number in list:
-    shutil.move(trainImages[number], trainImages[number].replace('train', 'test'))
-    shutil.move(trainXML[number], trainXML[number].replace('train', 'test'))
+while count != testSize:
+    x = random.randint(0, len(trainImages)-1-count)
+    shutil.move(trainImages[x], trainImages[x].replace('train', 'test'))
+    shutil.move(trainXML[x], trainXML[x].replace('train', 'test'))
+    trainImages.remove(trainImages[x])
+    trainXML.remove(trainXML[x])
     count = count + 1
+
 print("\nImages moved from train to test:", count)

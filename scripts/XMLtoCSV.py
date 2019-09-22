@@ -35,5 +35,5 @@ def main():
         xml_df.to_csv(('images/' + folder + '_labels.csv'), index=None)
         print('Successfully converted xml to csv.')
 
-xml_df = xml_to_csv("D:/Database/reduced/train")
-xml_df.to_csv(('D:/Database/reduced/train.csv'), index=None)
+xml_df = xml_to_csv("D:/Database/reduced/train/")
+xml_df.to_csv(('D:/Database/reduced/all/csv/train.csv'), index=None)
