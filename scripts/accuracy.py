@@ -18,10 +18,10 @@ BASE   = "D:/Models/poop/inference_graphs"
 LABELS = "D:/Models/poop/labelmap.pbtxt"
 MODEL_NAMES  =  [
                 "faster_rcnn_inception_v2_pets_v1",
-                "ssd_mobilenet_v2_0052_v1",
-                "ssd_mobilenet_v2_0037_v2",
-                "ssd_mobilenet_v2_0037_v3",
-                "ssd_mobilenet_v2_v4"
+                "ssd_mobilenet_v2_0052_v1", # 0.98 (v1 of database)
+                "ssd_mobilenet_v2_0037_v2", # 0.97 (v1 of database)
+                "ssd_mobilenet_v2_0037_v3", # 0.95 (v1 of database)
+                "ssd_mobilenet_v2_v4" # 0.94 (v1 of database)
                 ]
 
 # Choose a model
@@ -35,6 +35,9 @@ PATH_TO_TRAIN_XML    = "D:/Database/reduced/train/*.xml"
 PATH_TO_TEST_XML     = "D:/Database/reduced/test/*.xml"
 OUTPUT               = "D:/Database/tests/*"
 NUM_CLASSES          = 1
+
+trainingImages = glob.glob(PATH_TO_TRAIN_IMAGES)
+testingImages = glob.glob(PATH_TO_TEST_IMAGES)
 
 # Grab all images
 IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES)
@@ -70,9 +73,16 @@ num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 totalDetections = 0
 totalObjects = 0
 
+testingObjects = 0
+testingDetections = 0
+
 # Run the model on every image
 with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
     for xmlIndex, image in enumerate(IMAGES):
+
+        isTestImage = False
+        if image in testingImages:
+            isTestImage = True
 
         # Get image name
         image = image.replace("\\","/")
@@ -83,8 +93,11 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
         tree = ET.parse(xml_file)
         root = tree.getroot()
 
+
         for menber in root.findall('object'):
             totalObjects = totalObjects + 1
+            if isTestImage:
+                testingObjects = testingObjects + 1
 
         # Load current image
         image = cv2.imread(image)
@@ -102,6 +115,8 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
             pass
         totalDetections = totalDetections + numberDetection
 
+        if isTestImage:
+            testingDetections = testingDetections + numberDetection
         # Draw boxes
         vis_util.visualize_boxes_and_labels_on_image_array(
             image,
@@ -118,6 +133,11 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
         # print(xmlIndex, ":" , name, numberDetection)
         bar.update(xmlIndex)
 
+print("\n== Testing == ")
+print("Successful Detections :", testingDetections)
+print("Total objects         :", testingObjects)
+print("Accuracy              :", round(testingDetections/testingObjects, 2))
+print("\n== Total == ")
 print("Successful Detections :", totalDetections)
 print("Total objects         :", totalObjects)
 print("Accuracy              :", round(totalDetections/totalObjects, 2))
