@@ -25,7 +25,7 @@ MODEL_NAMES  =  [
                 ]
 
 # Choose a model
-MODEL_NAME = MODEL_NAMES[4]
+MODEL_NAME = MODEL_NAMES[1]
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
 # Image Directories

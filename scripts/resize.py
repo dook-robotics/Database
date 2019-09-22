@@ -1,6 +1,7 @@
 from PIL import Image
 import glob
 images = glob.glob("D:/Database/raw/*/*")
+# images = glob.glob("D:/Database/raw/trippleRocks/*")
 
 # adjust width and height to your needs
 # 1.7777
@@ -13,5 +14,5 @@ for file in images:
     im1 = Image.open(imageFile)
     imageFile = imageFile.replace("raw", "reduced")
     im = im1.resize((width, height), Image.ANTIALIAS)    # best down-sizing filter
-    im.save(imageFile)
+    # im.save(imageFile)
     pass
