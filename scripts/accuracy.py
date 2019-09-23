@@ -21,11 +21,25 @@ MODEL_NAMES  =  [
                 "ssd_mobilenet_v2_0052_v1", # 0.98 (v1 of database)
                 "ssd_mobilenet_v2_0037_v2", # 0.97 (v1 of database)
                 "ssd_mobilenet_v2_0037_v3", # 0.95 (v1 of database)
-                "ssd_mobilenet_v2_v4" # 0.94 (v1 of database)
+                "ssd_mobilenet_v2_v4", # 0.94 (v1 of database)
+                "ssd_mobilenet_v2_datav2_v1", # 96% overall #1386 Detections #38 False positives #15 Missed Objects
+                # ssd_mobilenet_v2_datav2_v2 (0.75 thresh) 90% overall #1242 Detections #7 False positives #129 Missed Objects
+                # Those 7 FD break down like: 4 'thank you' rock 2 Red thing 1 normal rock
+                "ssd_mobilenet_v2_datav2_v2",
+                # ssd_mobilenet_v2_datav2_v3 (0.75 thresh) 73% overall #998 Detections  #0 False positives #367 Missed Objects
+                # ssd_mobilenet_v2_datav2_v3 (0.5 thresh)  80% overall #1092 Detections #0 False positives #273 Missed Objects
+                # ssd_mobilenet_v2_datav2_v3 (0.25 thresh) 86% overall #1169 Detections #0 False positives #196 Missed Objects
+                "ssd_mobilenet_v2_datav2_v3",
+                "ssd_mobilenet_v2_datav2_v4",
+                "ssd_mobilenet_v2.2.5", # Terrible soo many high confidence false detections
+                # ssd_mobilenet_v2_datav2_v3 (0.6 thresh)  93% overall #1274 Detections #4 False positives #95 Missed Objects
+                # ssd_mobilenet_v2_datav2_v3 (0.5 thresh)  95% overall #1291 Detections #8 False positives #82 Missed Objects
+                "ssd_mobilenet_v2.2.6"
                 ]
 
 # Choose a model
-MODEL_NAME = MODEL_NAMES[1]
+# MODEL_NAME = MODEL_NAMES[0]
+MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
 # Image Directories
