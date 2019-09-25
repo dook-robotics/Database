@@ -2,6 +2,7 @@ import os
 import cv2
 import sys
 import glob
+import argparse
 import progressbar
 import numpy as np
 import tensorflow as tf
@@ -10,6 +11,23 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 import time
 import math
+
+# Add command line arguments
+parser = argparse.ArgumentParser(
+                                 description = 'Dook Robotics - Model Accuracy Script',
+                                 epilog = "Dook Robotics - https://github.com/dook-robotics"
+                                )
+
+parser.add_argument(
+                               '--fp',
+                     dest    = 'fpCLA',
+                     action  = 'store_true',
+                     default = 'False',
+                     help    = 'Prints out all files with a false positive.'
+                    )
+
+args = parser.parse_args()
+
 
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0]) * (p0[0] - p1[0]) + (p0[1] - p1[1]) * (p0[1] - p1[1]))
@@ -93,12 +111,15 @@ num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
 totalDetections = 0
 totalObjects = 0
-
 testingObjects = 0
 testingDetections = 0
-falseNumberDetection = 0;
+falseNumberDetection = 0
+falseNumberDetectionTesting = 0
+
+falsePositiveImages = []
 
 # Run the model on every image
+os.system('cls')
 with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
     for xmlIndex, image in enumerate(IMAGES):
 
@@ -152,12 +173,18 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
                 cv2.circle(image,(centerx,centery),5,(0,255,0),-1)
                 numberDetection = numberDetection + 1
                 if falsePositive:
+                    if not name in falsePositiveImages:
+                        falsePositiveImages.append(name)
                     falseNumberDetection = falseNumberDetection + 1
+                    if isTestImage:
+                        falseNumberDetectionTesting = falseNumberDetectionTesting + 1
+
             pass
         totalDetections = totalDetections + numberDetection
 
         if isTestImage:
             testingDetections = testingDetections + numberDetection
+
         # Draw boxes
         vis_util.visualize_boxes_and_labels_on_image_array(
             image,
@@ -171,16 +198,37 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
 
         # Write to output
         cv2.imwrite('D:/Database/tests/test' + name, image)
-        # print(xmlIndex, ":" , name, numberDetection)
         bar.update(xmlIndex)
 
-print("\n== Testing == ")
-print("Successful Detections :", testingDetections)
-print("Total objects         :", testingObjects)
-print("Accuracy              :", round(testingDetections/testingObjects, 2))
-print("\n== Total == ")
-print("Successful Detections :", totalDetections)
-print("Total objects         :", totalObjects)
-print("Accuracy              :", round(totalDetections/totalObjects, 2))
+print("\nModel:", MODEL_NAME)
+print("Threshold:", THRESH)
 
-print("False", falseNumberDetection)
+print("\n=========== Testing =========== ")
+print("Detections               :", testingDetections)
+print("Testing False Detections :", falseNumberDetectionTesting)
+print("Successful Detections    :", testingDetections - falseNumberDetectionTesting)
+print("Total objects            :", testingObjects)
+print("True Accuracy            :", round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2))
+print("Effective Accuracy       :", round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2))
+print("=============================== ")
+
+print("\n============ Total ============ ")
+print("Detections               :", totalDetections)
+print("Total False Detections   :", falseNumberDetection)
+print("Successful Detections    :", totalDetections - falseNumberDetection)
+print("Total objects            :", totalObjects)
+print("True Accuracy            :", round((totalDetections - falseNumberDetection) / totalObjects, 2))
+print("Effective Accuracy       :", round((totalDetections - falseNumberDetection * 2) / totalObjects, 2))
+print("=============================== ")
+
+print("\n======= False Positives =======")
+if len(falsePositiveImages) < 10 or args.fpCLA == "True":
+    if(len(falsePositiveImages) == 0):
+        print("No false positives!")
+    else:
+        for image in falsePositiveImages:
+            print(image)
+            pass
+else:
+    print("False Positive Files:", len(falsePositiveImages))
+    print("Run with --fp option to show files")
