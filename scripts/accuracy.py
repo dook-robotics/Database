@@ -9,6 +9,10 @@ import xml.etree.ElementTree as ET
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 import time
+import math
+
+def distance(p0, p1):
+    return math.sqrt((p0[0] - p1[0]) * (p0[0] - p1[0]) + (p0[1] - p1[1]) * (p0[1] - p1[1]))
 
 # Detection Threshold
 THRESH = 0.5
@@ -32,13 +36,13 @@ MODEL_NAMES  =  [
                 "ssd_mobilenet_v2_datav2_v3",
                 "ssd_mobilenet_v2_datav2_v4",
                 "ssd_mobilenet_v2.2.5", # Terrible soo many high confidence false detections
-                # ssd_mobilenet_v2_datav2_v3 (0.6 thresh)  93% overall #1274 Detections #4 False positives #95 Missed Objects
-                # ssd_mobilenet_v2_datav2_v3 (0.5 thresh)  95% overall #1291 Detections #8 False positives #82 Missed Objects
+                # ssd_mobilenet_v2.2.6 (0.6 thresh)  93% overall #1274 Detections #4 False positives #95 Missed Objects
+                # ssd_mobilenet_v2.2.6 (0.5 thresh)  95% overall #1291 Detections #8 False positives #82 Missed Objects
                 "ssd_mobilenet_v2.2.6"
                 ]
 
 # Choose a model
-# MODEL_NAME = MODEL_NAMES[0]
+# MODEL_NAME = MODEL_NAMES[7]
 MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
@@ -49,6 +53,9 @@ PATH_TO_TRAIN_XML    = "D:/Database/reduced/train/*.xml"
 PATH_TO_TEST_XML     = "D:/Database/reduced/test/*.xml"
 OUTPUT               = "D:/Database/tests/*"
 NUM_CLASSES          = 1
+
+IM_WIDTH  = 960
+IM_HEIGHT = 540
 
 trainingImages = glob.glob(PATH_TO_TRAIN_IMAGES)
 testingImages = glob.glob(PATH_TO_TEST_IMAGES)
@@ -89,6 +96,7 @@ totalObjects = 0
 
 testingObjects = 0
 testingDetections = 0
+falseNumberDetection = 0;
 
 # Run the model on every image
 with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
@@ -124,8 +132,27 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
 
         numberDetection = 0;
         for index, box in enumerate(np.squeeze(boxes)):
+            ymin = int((box[0]*IM_HEIGHT))
+            xmin = int((box[1]*IM_WIDTH))
+            ymax = int((box[2]*IM_HEIGHT))
+            xmax = int((box[3]*IM_WIDTH))
+            falsePositive = True
             if(scores[0][index] >= THRESH):
+                centerx = int((xmin + xmax)/2)
+                centery = int((ymin + ymax)/2)
+                for menber in root.findall('object'):
+                    truthxmin = int(menber[4][0].text)
+                    truthymin = int(menber[4][1].text)
+                    truthxmax = int(menber[4][2].text)
+                    truthymax = int(menber[4][3].text)
+                    truthcenterx = int((truthxmin + truthxmax)/2)
+                    truthcentery = int((truthymin + truthymax)/2)
+                    if distance((truthcenterx,truthcentery),(centerx,centery)) < 50:
+                        falsePositive = False
+                cv2.circle(image,(centerx,centery),5,(0,255,0),-1)
                 numberDetection = numberDetection + 1
+                if falsePositive:
+                    falseNumberDetection = falseNumberDetection + 1
             pass
         totalDetections = totalDetections + numberDetection
 
@@ -155,3 +182,5 @@ print("\n== Total == ")
 print("Successful Detections :", totalDetections)
 print("Total objects         :", totalObjects)
 print("Accuracy              :", round(totalDetections/totalObjects, 2))
+
+print("False", falseNumberDetection)
