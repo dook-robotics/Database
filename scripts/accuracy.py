@@ -85,12 +85,21 @@ MODEL_NAMES  =  [
                 # True Accuracy            : 0.75
                 # Effective Accuracy       : 0.73
                 # ===============================
-                "ssd_mobilenet_v2.3.0"
+                "ssd_mobilenet_v2.3.0",
+                # ======= Total - v2.3.1  =======
+                # Detections               : 1628
+                # Total False Detections   : 19
+                # Successful Detections    : 1609
+                # Total objects            : 2607
+                # True Accuracy            : 0.62
+                # Effective Accuracy       : 0.61
+                # ===============================
+                "ssd_mobilenet_v2.3.1"
                 ]
 
 # Choose a model
-MODEL_NAME = MODEL_NAMES[10]
-# MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
+# MODEL_NAME = MODEL_NAMES[10]
+MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
 # Image Directories
