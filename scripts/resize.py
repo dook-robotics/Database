@@ -1,7 +1,7 @@
 from PIL import Image
 import glob
 # images = glob.glob("D:/Database/raw/*/*")
-images = glob.glob("D:/Database/raw/trippleRocks2/*")
+images = glob.glob("D:/Database/raw/trippleGrass/*")
 
 # adjust width and height to your needs
 # 1.7777

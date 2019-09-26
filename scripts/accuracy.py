@@ -53,7 +53,8 @@ MODEL_NAMES  =  [
                 "ssd_mobilenet_v2_0037_v2", # 0.97 (v1 of database)
                 "ssd_mobilenet_v2_0037_v3", # 0.95 (v1 of database)
                 "ssd_mobilenet_v2_v4", # 0.94 (v1 of database)
-                "ssd_mobilenet_v2_datav2_v1", # 96% overall #1386 Detections #38 False positives #15 Missed Objects
+                # ssd_mobilenet_v2_datav2_v1 96% overall #1386 Detections #38 False positives #15 Missed Objects
+                "ssd_mobilenet_v2_datav2_v1",
                 # ssd_mobilenet_v2_datav2_v2 (0.75 thresh) 90% overall #1242 Detections #7 False positives #129 Missed Objects
                 # Those 7 FD break down like: 4 'thank you' rock 2 Red thing 1 normal rock
                 "ssd_mobilenet_v2_datav2_v2",
@@ -62,22 +63,43 @@ MODEL_NAMES  =  [
                 # ssd_mobilenet_v2_datav2_v3 (0.25 thresh) 86% overall #1169 Detections #0 False positives #196 Missed Objects
                 "ssd_mobilenet_v2_datav2_v3",
                 "ssd_mobilenet_v2_datav2_v4",
-                "ssd_mobilenet_v2.2.5", # Terrible soo many high confidence false detections
+                 # ssd_mobilenet_v2.2.5 Terrible soo many high confidence false detections
+                "ssd_mobilenet_v2.2.5",
                 # ssd_mobilenet_v2.2.6 (0.6 thresh)  93% overall #1274 Detections #4 False positives #95 Missed Objects
                 # ssd_mobilenet_v2.2.6 (0.5 thresh)  95% overall #1291 Detections #8 False positives #82 Missed Objects
-                "ssd_mobilenet_v2.2.6"
+                # On version database v3
+                # ======= Total - v2.2.6  =======
+                # Detections               : 2637
+                # Total False Detections   : 363
+                # Successful Detections    : 2274
+                # Total objects            : 2607
+                # True Accuracy            : 0.87
+                # Effective Accuracy       : 0.73
+                # ===============================
+                "ssd_mobilenet_v2.2.6", #10
+                # ======= Total - v2.3.0  =======
+                # Detections               : 1973
+                # Total False Detections   : 30
+                # Successful Detections    : 1943
+                # Total objects            : 2607
+                # True Accuracy            : 0.75
+                # Effective Accuracy       : 0.73
+                # ===============================
+                "ssd_mobilenet_v2.3.0"
                 ]
 
 # Choose a model
-# MODEL_NAME = MODEL_NAMES[7]
-MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
+MODEL_NAME = MODEL_NAMES[10]
+# MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
 # Image Directories
 PATH_TO_TRAIN_IMAGES = "D:/Database/reduced/train/*.jpg"
 PATH_TO_TEST_IMAGES  = "D:/Database/reduced/test/*.jpg"
+PATH_TO_V_IMAGES     = "D:/Database/reduced/verification/*.jpg"
 PATH_TO_TRAIN_XML    = "D:/Database/reduced/train/*.xml"
 PATH_TO_TEST_XML     = "D:/Database/reduced/test/*.xml"
+PATH_TO_V_XML        = "D:/Database/reduced/verification/*.xml"
 OUTPUT               = "D:/Database/tests/*"
 NUM_CLASSES          = 1
 
@@ -85,11 +107,12 @@ IM_WIDTH  = 960
 IM_HEIGHT = 540
 
 trainingImages = glob.glob(PATH_TO_TRAIN_IMAGES)
-testingImages = glob.glob(PATH_TO_TEST_IMAGES)
+testingImages  = glob.glob(PATH_TO_TEST_IMAGES)
+vImages        = glob.glob(PATH_TO_V_IMAGES)
 
 # Grab all images
-IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES)
-XML = glob.glob(PATH_TO_TRAIN_XML) + glob.glob(PATH_TO_TEST_XML)
+IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES) + glob.glob(PATH_TO_V_IMAGES)
+XML = glob.glob(PATH_TO_TRAIN_XML) + glob.glob(PATH_TO_TEST_XML) + glob.glob(PATH_TO_V_XML)
 
 # Clean output folder
 OUTPUT_FILES = glob.glob(OUTPUT)
@@ -122,6 +145,9 @@ totalDetections = 0
 totalObjects = 0
 testingObjects = 0
 testingDetections = 0
+vObjects = 0
+vDetections = 0
+vFalseDetections = 0
 falseNumberDetection = 0
 falseNumberDetectionTesting = 0
 
@@ -135,6 +161,10 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
         isTestImage = False
         if image in testingImages:
             isTestImage = True
+
+        isVImage = False
+        if image in vImages:
+            isVImage = True
 
         # Get image name
         image = image.replace("\\","/")
@@ -150,6 +180,8 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
             totalObjects = totalObjects + 1
             if isTestImage:
                 testingObjects = testingObjects + 1
+            if isVImage:
+                vObjects = vObjects + 1
 
         # Load current image
         image = cv2.imread(image)
@@ -187,12 +219,17 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
                     falseNumberDetection = falseNumberDetection + 1
                     if isTestImage:
                         falseNumberDetectionTesting = falseNumberDetectionTesting + 1
+                    if isVImage:
+                        vFalseDetections = vFalseDetections + 1
 
             pass
         totalDetections = totalDetections + numberDetection
 
         if isTestImage:
             testingDetections = testingDetections + numberDetection
+        if isVImage:
+            vDetections = vDetections + numberDetection
+
 
         # Draw boxes
         vis_util.visualize_boxes_and_labels_on_image_array(
@@ -206,12 +243,22 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
             min_score_thresh=THRESH)
 
         # Write to output
-        if args.saveCLA:
+        if args.saveCLA != "False":
             cv2.imwrite('D:/Database/tests/test' + name, image)
         bar.update(xmlIndex)
 
 print("\nModel:", MODEL_NAME)
 print("Threshold:", THRESH)
+
+print("\n======== Verification ======== ")
+print("Detections               :", vDetections)
+print("Testing False Detections :", vFalseDetections)
+print("Successful Detections    :", vDetections - vFalseDetections)
+print("Total objects            :", vObjects)
+print("True Accuracy            :", round((vDetections - vFalseDetections) / vObjects, 2))
+print("Effective Accuracy       :", round((vDetections - vFalseDetections * 2) / vObjects, 2))
+print("=============================== ")
+
 
 print("\n=========== Testing =========== ")
 print("Detections               :", testingDetections)
@@ -222,7 +269,7 @@ print("True Accuracy            :", round((testingDetections - falseNumberDetect
 print("Effective Accuracy       :", round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2))
 print("=============================== ")
 
-print("\n============ Total ============ ")
+print("\n======= Total -", MODEL_NAME.split("_")[2], " ======= ")
 print("Detections               :", totalDetections)
 print("Total False Detections   :", falseNumberDetection)
 print("Successful Detections    :", totalDetections - falseNumberDetection)
@@ -232,7 +279,7 @@ print("Effective Accuracy       :", round((totalDetections - falseNumberDetectio
 print("=============================== ")
 
 print("\n======= False Positives =======")
-if len(falsePositiveImages) < 10 or args.fpCLA == "True":
+if len(falsePositiveImages) < 10 or args.fpCLA != "False":
     if(len(falsePositiveImages) == 0):
         print("No false positives!")
     else:
