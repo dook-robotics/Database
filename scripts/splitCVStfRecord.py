@@ -108,7 +108,8 @@ def xml_to_csv(path):
 
 os.system('cls')
 
-split = .2
+splitTest = .1
+splitV    = .1
 
 test = glob.glob("D:/Database/reduced/test/*")
 verification = glob.glob("D:/Database/reduced/verification/*")
@@ -131,8 +132,8 @@ print("Images moved from verification to train :", int(countv/2))
 print("\nImages in train folder                  :", len(trainImages))
 print("XML in train folder                     :", len(trainXML))
 
-testSize         = int((int(split * len(trainImages))) / 2)
-verificationSize = testSize
+testSize         = int(splitTest * len(trainImages))
+verificationSize = int(splitV * len(trainImages))
 
 count = 0
 while count != testSize:

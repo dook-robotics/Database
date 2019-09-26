@@ -26,6 +26,15 @@ parser.add_argument(
                      help    = 'Prints out all files with a false positive.'
                     )
 
+parser.add_argument(
+                               '--save',
+                     dest    = 'saveCLA',
+                     action  = 'store_true',
+                     default = 'False',
+                     help    = 'Saves all images to an output file.'
+                    )
+
+
 args = parser.parse_args()
 
 
@@ -197,7 +206,8 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
             min_score_thresh=THRESH)
 
         # Write to output
-        cv2.imwrite('D:/Database/tests/test' + name, image)
+        if args.saveCLA:
+            cv2.imwrite('D:/Database/tests/test' + name, image)
         bar.update(xmlIndex)
 
 print("\nModel:", MODEL_NAME)
