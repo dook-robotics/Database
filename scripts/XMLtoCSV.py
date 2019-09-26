@@ -4,6 +4,7 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 def xml_to_csv(path):
+    print(path)
     xml_list = []
     for xml_file in glob.glob(path + '/*.xml'):
         tree = ET.parse(xml_file)
@@ -35,5 +36,5 @@ def main():
         xml_df.to_csv(('images/' + folder + '_labels.csv'), index=None)
         print('Successfully converted xml to csv.')
 
-xml_df = xml_to_csv("D:/Database/reduced/train/")
-xml_df.to_csv(('D:/Database/reduced/all/csv/train.csv'), index=None)
+xml_df = xml_to_csv("D:/Database/reduced/all/xml/*/")
+# xml_df.to_csv(('D:/Database/reduced/all/csv/master.csv'), index=None)
