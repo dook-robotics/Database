@@ -94,7 +94,50 @@ MODEL_NAMES  =  [
                 # True Accuracy            : 0.62
                 # Effective Accuracy       : 0.61
                 # ===============================
-                "ssd_mobilenet_v2.3.1"
+                "ssd_mobilenet_v2.3.1",
+                # ======= Total - v2.3.2  =======
+                # Detections               : 1528
+                # Total False Detections   : 40
+                # Successful Detections    : 1488
+                # Total objects            : 2607
+                # True Accuracy            : 0.57
+                # Effective Accuracy       : 0.56
+                # ===============================
+                "ssd_mobilenet_v2.3.2",
+                # ==== Total - v2.3.3 - 0.25 ====
+                # Detections               : 2268
+                # Total False Detections   : 165
+                # Successful Detections    : 2103
+                # Total objects            : 2607
+                # True Accuracy            : 0.81
+                # Effective Accuracy       : 0.74
+                # ===============================
+                # ==== Total - v2.3.3 - 0.50 ====
+                # Detections               : 2067
+                # Total False Detections   : 117
+                # Successful Detections    : 1950
+                # Total objects            : 2607
+                # True Accuracy            : 0.75
+                # Effective Accuracy       : 0.7
+                # ===============================
+                "ssd_mobilenet_v2.3.3",
+                # ==== Total - v2.3.4 - 0.25 ====
+                # Detections               : 1895
+                # Total False Detections   : 65
+                # Successful Detections    : 1830
+                # Total objects            : 2607
+                # True Accuracy            : 0.7
+                # Effective Accuracy       : 0.68
+                # ===============================
+                # ==== Total - v2.3.4 - 0.50 ====
+                # Detections               : 1752
+                # Total False Detections   : 51
+                # Successful Detections    : 1701
+                # Total objects            : 2607
+                # True Accuracy            : 0.65
+                # Effective Accuracy       : 0.63
+                # ===============================
+                "ssd_mobilenet_v2.3.4"
                 ]
 
 # Choose a model
@@ -239,20 +282,20 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
         if isVImage:
             vDetections = vDetections + numberDetection
 
-
-        # Draw boxes
-        vis_util.visualize_boxes_and_labels_on_image_array(
-            image,
-            np.squeeze(boxes),
-            np.squeeze(classes).astype(np.int32),
-            np.squeeze(scores),
-            category_index,
-            use_normalized_coordinates=True,
-            line_thickness=2,
-            min_score_thresh=THRESH)
-
-        # Write to output
         if args.saveCLA != "False":
+
+            # Draw boxes
+            vis_util.visualize_boxes_and_labels_on_image_array(
+                image,
+                np.squeeze(boxes),
+                np.squeeze(classes).astype(np.int32),
+                np.squeeze(scores),
+                category_index,
+                use_normalized_coordinates=True,
+                line_thickness=2,
+                min_score_thresh=THRESH)
+
+            # Write to output
             cv2.imwrite('D:/Database/tests/test' + name, image)
         bar.update(xmlIndex)
 
@@ -278,7 +321,7 @@ print("True Accuracy            :", round((testingDetections - falseNumberDetect
 print("Effective Accuracy       :", round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2))
 print("=============================== ")
 
-print("\n======= Total -", MODEL_NAME.split("_")[2], " ======= ")
+print("\n==== Total -", MODEL_NAME.split("_")[2], "- {:0.2f} ==== ".format(THRESH))
 print("Detections               :", totalDetections)
 print("Total False Detections   :", falseNumberDetection)
 print("Successful Detections    :", totalDetections - falseNumberDetection)
