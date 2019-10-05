@@ -1,0 +1,26 @@
+<annotation>
+	<folder>trippleGrass</folder>
+	<filename>116.jpg</filename>
+	<path>C:\Dook\Database\reduced\all\images\trippleGrass\116.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>540</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>poop</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>318</xmin>
+			<ymin>36</ymin>
+			<xmax>391</xmax>
+			<ymax>107</ymax>
+		</bndbox>
+	</object>
+</annotation>
