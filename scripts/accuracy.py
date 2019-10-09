@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(
                                 )
 
 parser.add_argument(
-                               '--fp',
+                               '-fp',
                      dest    = 'fpCLA',
                      action  = 'store_true',
                      default = 'False',
@@ -27,16 +27,23 @@ parser.add_argument(
                     )
 
 parser.add_argument(
-                               '--save',
+                               '-save',
                      dest    = 'saveCLA',
                      action  = 'store_true',
                      default = 'False',
                      help    = 'Saves all images to an output file.'
                     )
+parser.add_argument(
+                               '-m',
+                     dest    = 'modelCLA',
+                     action  = 'store',
+                     default = -1,
+                     help    = 'Selects a saved model.'
+                    )
+
 
 
 args = parser.parse_args()
-
 
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0]) * (p0[0] - p1[0]) + (p0[1] - p1[1]) * (p0[1] - p1[1]))
@@ -159,8 +166,11 @@ MODEL_NAMES  =  [
                 ]
 
 # Choose a model
-# MODEL_NAME = MODEL_NAMES[10]
-MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
+if int(args.modelCLA) >= 0:
+    MODEL_NAME = MODEL_NAMES[int(args.modelCLA)]
+else:
+    MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
+
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
 # Image Directories
@@ -325,8 +335,8 @@ print("Detections               :", vDetections)
 print("Testing False Detections :", vFalseDetections)
 print("Successful Detections    :", vDetections - vFalseDetections)
 print("Total objects            :", vObjects)
-print("True Accuracy            :", round((vDetections - vFalseDetections) / vObjects, 2))
-print("Effective Accuracy       :", round((vDetections - vFalseDetections * 2) / vObjects, 2))
+print("True Accuracy            :", max(0, round((vDetections - vFalseDetections) / vObjects, 2)))
+print("Effective Accuracy       :", max(0, round((vDetections - vFalseDetections * 2) / vObjects, 2)))
 print("=============================== ")
 
 
@@ -335,8 +345,8 @@ print("Detections               :", testingDetections)
 print("Testing False Detections :", falseNumberDetectionTesting)
 print("Successful Detections    :", testingDetections - falseNumberDetectionTesting)
 print("Total objects            :", testingObjects)
-print("True Accuracy            :", round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2))
-print("Effective Accuracy       :", round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2))
+print("True Accuracy            :", max(0, round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2)))
+print("Effective Accuracy       :", max(0, round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2)))
 print("=============================== ")
 
 if MODEL_NAME.split("_")[0] == "ssd":
@@ -347,8 +357,8 @@ print("Detections               :", totalDetections)
 print("Total False Detections   :", falseNumberDetection)
 print("Successful Detections    :", totalDetections - falseNumberDetection)
 print("Total objects            :", totalObjects)
-print("True Accuracy            :", round((totalDetections - falseNumberDetection) / totalObjects, 2))
-print("Effective Accuracy       :", round((totalDetections - falseNumberDetection * 2) / totalObjects, 2))
+print("True Accuracy            :", max(0, round((totalDetections - falseNumberDetection) / totalObjects, 2)))
+print("Effective Accuracy       :", max(0, round((totalDetections - falseNumberDetection * 2) / totalObjects, 2)))
 print("=============================== ")
 
 print("\n======= False Positives =======")
@@ -361,4 +371,4 @@ if len(falsePositiveImages) < 10 or args.fpCLA != "False":
             pass
 else:
     print("False Positive Files:", len(falsePositiveImages))
-    print("Run with --fp option to show files")
+    print("Run with -fp option to show files")
