@@ -42,7 +42,7 @@ def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0]) * (p0[0] - p1[0]) + (p0[1] - p1[1]) * (p0[1] - p1[1]))
 
 # Detection Threshold
-THRESH = 0.5
+THRESH = 0.25
 
 # Directories and Models
 BASE   = "D:/Models/poop/inference_graphs"
@@ -137,7 +137,25 @@ MODEL_NAMES  =  [
                 # True Accuracy            : 0.65
                 # Effective Accuracy       : 0.63
                 # ===============================
-                "ssd_mobilenet_v2.3.4"
+                "ssd_mobilenet_v2.3.4",
+                # ==== Total - v2.3.0 - 0.50 ====
+                # Detections               : 2451
+                # Total False Detections   : 56
+                # Successful Detections    : 2395
+                # Total objects            : 2607
+                # True Accuracy            : 0.92
+                # Effective Accuracy       : 0.9
+                # ===============================
+                "frcnn_v2.3.0",
+                # ==== Total - v2.3.1 - 0.50 ====
+                # Detections               : 2146
+                # Total False Detections   : 27
+                # Successful Detections    : 2119
+                # Total objects            : 2607
+                # True Accuracy            : 0.81
+                # Effective Accuracy       : 0.8
+                # ===============================
+                "frcnn_v2.3.1"
                 ]
 
 # Choose a model
@@ -321,7 +339,10 @@ print("True Accuracy            :", round((testingDetections - falseNumberDetect
 print("Effective Accuracy       :", round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2))
 print("=============================== ")
 
-print("\n==== Total -", MODEL_NAME.split("_")[2], "- {:0.2f} ==== ".format(THRESH))
+if MODEL_NAME.split("_")[0] == "ssd":
+    print("\n==== Total -", MODEL_NAME.split("_")[2], "- {:0.2f} ==== ".format(THRESH))
+else:
+    print("\n==== Total -", MODEL_NAME.split("_")[1], "- {:0.2f} ==== ".format(THRESH))
 print("Detections               :", totalDetections)
 print("Total False Detections   :", falseNumberDetection)
 print("Successful Detections    :", totalDetections - falseNumberDetection)
