@@ -33,6 +33,15 @@ parser.add_argument(
                      default = 'False',
                      help    = 'Saves all images to an output file.'
                     )
+
+parser.add_argument(
+                               '-savefp',
+                     dest    = 'savefpCLA',
+                     action  = 'store_true',
+                     default = 'False',
+                     help    = 'Saves images with a false positive to an output file.'
+                    )
+
 parser.add_argument(
                                '-m',
                      dest    = 'modelCLA',
@@ -41,7 +50,13 @@ parser.add_argument(
                      help    = 'Selects a saved model.'
                     )
 
-
+parser.add_argument(
+                               '-d',
+                     dest    = 'dataCLA',
+                     action  = 'store',
+                     default = 0,
+                     help    = 'Select a version of the database.'
+                    )
 
 args = parser.parse_args()
 
@@ -49,7 +64,7 @@ def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0]) * (p0[0] - p1[0]) + (p0[1] - p1[1]) * (p0[1] - p1[1]))
 
 # Detection Threshold
-THRESH = 0.25
+THRESH = 0.5
 
 # Directories and Models
 BASE   = "D:/Models/poop/inference_graphs"
@@ -174,14 +189,24 @@ else:
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
 # Image Directories
-PATH_TO_TRAIN_IMAGES = "D:/Database/reduced/train/*.jpg"
-PATH_TO_TEST_IMAGES  = "D:/Database/reduced/test/*.jpg"
-PATH_TO_V_IMAGES     = "D:/Database/reduced/verification/*.jpg"
-PATH_TO_TRAIN_XML    = "D:/Database/reduced/train/*.xml"
-PATH_TO_TEST_XML     = "D:/Database/reduced/test/*.xml"
-PATH_TO_V_XML        = "D:/Database/reduced/verification/*.xml"
-OUTPUT               = "D:/Database/tests/*"
-NUM_CLASSES          = 1
+PATH_TO_TRAIN_IMAGES   = "D:/Database/reduced/train/*.jpg"
+PATH_TO_TRAIN_XML      = "D:/Database/reduced/train/*.xml"
+PATH_TO_TEST_IMAGES    = "D:/Database/reduced/test/*.jpg"
+PATH_TO_TEST_XML       = "D:/Database/reduced/test/*.xml"
+PATH_TO_V_IMAGES       = "D:/Database/reduced/verification/*.jpg"
+PATH_TO_V_XML          = "D:/Database/reduced/verification/*.xml"
+PATH_TO_SG_IMAGES      = "D:/Database/reduced/all/images/singleGrid/*.jpg"
+PATH_TO_SG_XML         = "D:/Database/reduced/all/xml/singleGrid/*.xml"
+PATH_TO_TR_IMAGES      = "D:/Database/reduced/all/images/tripple/*.jpg"
+PATH_TO_TR_XML         = "D:/Database/reduced/all/xml/tripple/*.xml"
+PATH_TO_TG_IMAGES      = "D:/Database/reduced/all/images/trippleGrid/*.jpg"
+PATH_TO_TG_XML         = "D:/Database/reduced/all/xml/trippleGrid/*.xml"
+PATH_TO_TROCKS_IMAGES  = "D:/Database/reduced/all/images/trippleRocks/*.jpg"
+PATH_TO_TROCKS_XML     = "D:/Database/reduced/all/xml/trippleRocks/*.xml"
+PATH_TO_TROCKS2_IMAGES = "D:/Database/reduced/all/images/trippleRocks2/*.jpg"
+PATH_TO_TROCKS2_XML    = "D:/Database/reduced/all/xml/trippleRocks2/*.xml"
+OUTPUT                 = "D:/Database/tests/*"
+NUM_CLASSES            = 1
 
 IM_WIDTH  = 960
 IM_HEIGHT = 540
@@ -191,8 +216,45 @@ testingImages  = glob.glob(PATH_TO_TEST_IMAGES)
 vImages        = glob.glob(PATH_TO_V_IMAGES)
 
 # Grab all images
-IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES) + glob.glob(PATH_TO_V_IMAGES)
-XML = glob.glob(PATH_TO_TRAIN_XML) + glob.glob(PATH_TO_TEST_XML) + glob.glob(PATH_TO_V_XML)
+if args.dataCLA == 0:
+    IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES) + glob.glob(PATH_TO_V_IMAGES)
+    XML = glob.glob(PATH_TO_TRAIN_XML) + glob.glob(PATH_TO_TEST_XML) + glob.glob(PATH_TO_V_XML)
+if args.dataCLA == "verification":
+    IMAGES = glob.glob(PATH_TO_V_IMAGES)
+    XML = glob.glob(PATH_TO_V_XML)
+if args.dataCLA == "train":
+    IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES)
+    XML = glob.glob(PATH_TO_TRAIN_XML)
+if args.dataCLA == "test":
+    IMAGES = glob.glob(PATH_TO_TEST_IMAGES)
+    XML = glob.glob(PATH_TO_TEST_XML)
+if args.dataCLA == "v1":
+    IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
+    XML     = glob.glob(PATH_TO_SG_XML)
+    IMAGES += glob.glob(PATH_TO_TR_IMAGES)
+    XML    += glob.glob(PATH_TO_TR_XML)
+    IMAGES += glob.glob(PATH_TO_TG_IMAGES)
+    XML    += glob.glob(PATH_TO_TG_XML)
+if args.dataCLA == "v2":
+    IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
+    XML     = glob.glob(PATH_TO_SG_XML)
+    IMAGES += glob.glob(PATH_TO_TR_IMAGES)
+    XML    += glob.glob(PATH_TO_TR_XML)
+    IMAGES += glob.glob(PATH_TO_TG_IMAGES)
+    XML    += glob.glob(PATH_TO_TG_XML)
+    IMAGES += glob.glob(PATH_TO_TROCKS_IMAGES)
+    XML    += glob.glob(PATH_TO_TROCKS_XML)
+if args.dataCLA == "v3":
+    IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
+    XML     = glob.glob(PATH_TO_SG_XML)
+    IMAGES += glob.glob(PATH_TO_TR_IMAGES)
+    XML    += glob.glob(PATH_TO_TR_XML)
+    IMAGES += glob.glob(PATH_TO_TG_IMAGES)
+    XML    += glob.glob(PATH_TO_TG_XML)
+    IMAGES += glob.glob(PATH_TO_TROCKS_IMAGES)
+    XML    += glob.glob(PATH_TO_TROCKS_XML)
+    IMAGES += glob.glob(PATH_TO_TROCKS2_IMAGES)
+    XML    += glob.glob(PATH_TO_TROCKS2_XML)
 
 # Clean output folder
 OUTPUT_FILES = glob.glob(OUTPUT)
@@ -273,6 +335,7 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
             feed_dict={image_tensor: image_expanded})
 
         numberDetection = 0;
+        printPictureFP = False
         for index, box in enumerate(np.squeeze(boxes)):
             ymin = int((box[0]*IM_HEIGHT))
             xmin = int((box[1]*IM_WIDTH))
@@ -290,10 +353,11 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
                     truthcenterx = int((truthxmin + truthxmax)/2)
                     truthcentery = int((truthymin + truthymax)/2)
                     if distance((truthcenterx,truthcentery),(centerx,centery)) < 50:
-                        falsePositive = False
+                        falsePositive  = False
                 cv2.circle(image,(centerx,centery),5,(0,255,0),-1)
                 numberDetection = numberDetection + 1
                 if falsePositive:
+                    printPictureFP = True
                     if not name in falsePositiveImages:
                         falsePositiveImages.append(name)
                     falseNumberDetection = falseNumberDetection + 1
@@ -310,7 +374,7 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
         if isVImage:
             vDetections = vDetections + numberDetection
 
-        if args.saveCLA != "False":
+        if args.saveCLA != "False" or (printPictureFP and args.savefpCLA != "False"):
 
             # Draw boxes
             vis_util.visualize_boxes_and_labels_on_image_array(
@@ -324,35 +388,54 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
                 min_score_thresh=THRESH)
 
             # Write to output
+
             cv2.imwrite('D:/Database/tests/test' + name, image)
         bar.update(xmlIndex)
 
-print("\nModel:", MODEL_NAME)
-print("Threshold:", THRESH)
+print("\nModel     :", MODEL_NAME)
+if args.dataCLA == 0:
+    print("Data      : All Images")
+else:
+    print("Data      :", args.dataCLA)
+print("Threshold :", THRESH)
+
+if vObjects > 0:
+    trueAcc = max(0, round((vDetections - vFalseDetections) / vObjects, 2))
+    effectiveAcc = max(0, round((vDetections - vFalseDetections * 2) / vObjects, 2))
+else:
+    trueAcc = 0
+    effectiveAcc = 0
 
 print("\n======== Verification ======== ")
 print("Detections               :", vDetections)
 print("Testing False Detections :", vFalseDetections)
 print("Successful Detections    :", vDetections - vFalseDetections)
 print("Total objects            :", vObjects)
-print("True Accuracy            :", max(0, round((vDetections - vFalseDetections) / vObjects, 2)))
-print("Effective Accuracy       :", max(0, round((vDetections - vFalseDetections * 2) / vObjects, 2)))
+print("True Accuracy            :", trueAcc)
+print("Effective Accuracy       :", effectiveAcc)
 print("=============================== ")
 
+if testingObjects > 0:
+    trueAcc = max(0, round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2))
+    effectiveAcc = max(0, round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2))
+else:
+    trueAcc = 0
+    effectiveAcc = 0
 
 print("\n=========== Testing =========== ")
 print("Detections               :", testingDetections)
 print("Testing False Detections :", falseNumberDetectionTesting)
 print("Successful Detections    :", testingDetections - falseNumberDetectionTesting)
 print("Total objects            :", testingObjects)
-print("True Accuracy            :", max(0, round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2)))
-print("Effective Accuracy       :", max(0, round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2)))
+print("True Accuracy            :", trueAcc)
+print("Effective Accuracy       :", effectiveAcc)
 print("=============================== ")
 
 if MODEL_NAME.split("_")[0] == "ssd":
     print("\n==== Total -", MODEL_NAME.split("_")[2], "- {:0.2f} ==== ".format(THRESH))
 else:
     print("\n==== Total -", MODEL_NAME.split("_")[1], "- {:0.2f} ==== ".format(THRESH))
+
 print("Detections               :", totalDetections)
 print("Total False Detections   :", falseNumberDetection)
 print("Successful Detections    :", totalDetections - falseNumberDetection)
@@ -362,7 +445,7 @@ print("Effective Accuracy       :", max(0, round((totalDetections - falseNumberD
 print("=============================== ")
 
 print("\n======= False Positives =======")
-if len(falsePositiveImages) < 10 or args.fpCLA != "False":
+if args.fpCLA != "False":
     if(len(falsePositiveImages) == 0):
         print("No false positives!")
     else:
