@@ -74,16 +74,6 @@ THRESH = 0.5
 BASE   = "D:/Models/poop/inference_graphs"
 LABELS = "D:/Models/poop/labelmap.pbtxt"
 MODEL_NAMES  =  [
-                "frcnn_v2.1.0",
-                    # ==== Total - v2.1.0 - 0.50 ====
-                    # Detections               : 766
-                    # Total False Detections   : 0
-                    # Successful Detections    : 766
-                    # Total objects            : 767
-                    # True Accuracy            : 1.0
-                    # Effective Accuracy       : 1.0
-                    # ===============================
-
                 "ssd_mobilenet_v2.1.0",
                     # ==== Total - v2.1.0 - 0.50 ====
                     # Detections               : 748
@@ -114,32 +104,85 @@ MODEL_NAMES  =  [
                     # Effective Accuracy       : 0.95
                     # ===============================
 
-                "ssd_mobilenet_v2_v4", # 0.94 (v1 of database)
-                # ssd_mobilenet_v2_datav2_v1 96% overall #1386 Detections #38 False positives #15 Missed Objects
-                "ssd_mobilenet_v2_datav2_v1",
-                # ssd_mobilenet_v2_datav2_v2 (0.75 thresh) 90% overall #1242 Detections #7 False positives #129 Missed Objects
-                # Those 7 FD break down like: 4 'thank you' rock 2 Red thing 1 normal rock
-                "ssd_mobilenet_v2_datav2_v2",
-                # ssd_mobilenet_v2_datav2_v3 (0.75 thresh) 73% overall #998 Detections  #0 False positives #367 Missed Objects
-                # ssd_mobilenet_v2_datav2_v3 (0.5 thresh)  80% overall #1092 Detections #0 False positives #273 Missed Objects
-                # ssd_mobilenet_v2_datav2_v3 (0.25 thresh) 86% overall #1169 Detections #0 False positives #196 Missed Objects
-                "ssd_mobilenet_v2_datav2_v3",
-                "ssd_mobilenet_v2_datav2_v4",
-                 # ssd_mobilenet_v2.2.5 Terrible soo many high confidence false detections
-                "ssd_mobilenet_v2.2.5",
-
-                "ssd_mobilenet_v2.2.6", #10
-                    # ssd_mobilenet_v2.2.6 (0.6 thresh)  93% overall #1274 Detections #4 False positives #95 Missed Objects
-                    # ssd_mobilenet_v2.2.6 (0.5 thresh)  95% overall #1291 Detections #8 False positives #82 Missed Objects
-                    # On version database v3
-                    # ======= Total - v2.2.6  =======
-                    # Detections               : 2637
-                    # Total False Detections   : 363
-                    # Successful Detections    : 2274
-                    # Total objects            : 2607
-                    # True Accuracy            : 0.87
-                    # Effective Accuracy       : 0.73
+                "ssd_mobilenet_v2.1.3",
+                    # ==== Total - v2.1.3 - 0.50 ====
+                    # Detections               : 718
+                    # Total False Detections   : 0
+                    # Successful Detections    : 718
+                    # Total objects            : 767
+                    # True Accuracy            : 0.94
+                    # Effective Accuracy       : 0.94
                     # ===============================
+
+                "ssd_mobilenet_v2.2.0",
+                    # ==== Total - v2.2.0 - 0.50 ====
+                    # Detections               : 1386
+                    # Total False Detections   : 39
+                    # Successful Detections    : 1347
+                    # Total objects            : 1365
+                    # True Accuracy            : 0.99
+                    # Effective Accuracy       : 0.96
+                    # ===============================
+
+                "ssd_mobilenet_v2.2.1",
+                    # ==== Total - v2.2.1 - 0.50 ====
+                    # Detections               : 1325
+                    # Total False Detections   : 15
+                    # Successful Detections    : 1310
+                    # Total objects            : 1365
+                    # True Accuracy            : 0.96
+                    # Effective Accuracy       : 0.95
+                    # ===============================
+
+                "ssd_mobilenet_v2.2.2",
+                    # ==== Total - v2.2.2 - 0.50 ====
+                    # Detections               : 1092
+                    # Total False Detections   : 0
+                    # Successful Detections    : 1092
+                    # Total objects            : 1365
+                    # True Accuracy            : 0.8
+                    # Effective Accuracy       : 0.8
+                    # ===============================
+
+                "ssd_mobilenet_v2.2.3",
+                    # ==== Total - v2.2.3 - 0.50 ====
+                    # Detections               : 2066
+                    # Total False Detections   : 778
+                    # Successful Detections    : 1288
+                    # Total objects            : 1365
+                    # True Accuracy            : 0.94
+                    # Effective Accuracy       : 0.37
+                    # ===============================
+
+                "ssd_mobilenet_v2.2.4",
+                    # ==== Total - v2.2.4 - 0.50 ====
+                    # Detections               : 56900
+                    # Total False Detections   : 49941
+                    # Successful Detections    : 6959
+                    # Total objects            : 1365
+                    # True Accuracy            : 5.1
+                    # Effective Accuracy       : 0
+                    # ===============================
+
+                "ssd_mobilenet_v2.2.5",
+                    # ==== Total - v2.2.5 - 0.50 ====
+                    # Detections               : 1291
+                    # Total False Detections   : 8
+                    # Successful Detections    : 1283
+                    # Total objects            : 1365
+                    # True Accuracy            : 0.94
+                    # Effective Accuracy       : 0.93
+                    # ===============================
+
+                        # Data: v3
+                        # ==== Total - v2.2.5 - 0.50 ====
+                        # Detections               : 2637
+                        # Total False Detections   : 363
+                        # Successful Detections    : 2274
+                        # Total objects            : 2607
+                        # True Accuracy            : 0.87
+                        # Effective Accuracy       : 0.73
+                        # ===============================
 
                 "ssd_mobilenet_v2.3.0",
                     # ======= Total - v2.3.0  =======
@@ -180,6 +223,7 @@ MODEL_NAMES  =  [
                     # True Accuracy            : 0.81
                     # Effective Accuracy       : 0.74
                     # ===============================
+
                     # ==== Total - v2.3.3 - 0.50 ====
                     # Detections               : 2067
                     # Total False Detections   : 117
@@ -198,6 +242,7 @@ MODEL_NAMES  =  [
                     # True Accuracy            : 0.7
                     # Effective Accuracy       : 0.68
                     # ===============================
+
                     # ==== Total - v2.3.4 - 0.50 ====
                     # Detections               : 1752
                     # Total False Detections   : 51
@@ -205,6 +250,16 @@ MODEL_NAMES  =  [
                     # Total objects            : 2607
                     # True Accuracy            : 0.65
                     # Effective Accuracy       : 0.63
+                    # ===============================
+
+                "frcnn_v2.1.0",
+                    # ==== Total - v2.1.0 - 0.50 ====
+                    # Detections               : 766
+                    # Total False Detections   : 0
+                    # Successful Detections    : 766
+                    # Total objects            : 767
+                    # True Accuracy            : 1.0
+                    # Effective Accuracy       : 1.0
                     # ===============================
 
                 "frcnn_v2.3.0",
