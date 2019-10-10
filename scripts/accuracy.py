@@ -62,13 +62,26 @@ parser.add_argument(
                      help    = 'Select a version of the database.'
                     )
 
+parser.add_argument(
+                               '-t',
+                     dest    = 'threshCLA',
+                     action  = 'store',
+                     default = 0.5,
+                     help    = 'Select a version of the database.'
+                    )
+
+
 args = parser.parse_args()
 
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0]) * (p0[0] - p1[0]) + (p0[1] - p1[1]) * (p0[1] - p1[1]))
 
 # Detection Threshold
-THRESH = 0.5
+threshCLA = float(args.threshCLA)
+if threshCLA >= 0 and threshCLA <= 1:
+    THRESH = threshCLA
+else:
+    THRESH = 0.5
 
 # Directories and Models
 BASE   = "D:/Models/poop/inference_graphs"
@@ -165,24 +178,51 @@ MODEL_NAMES  =  [
                     # ===============================
 
                 "ssd_mobilenet_v2.2.5",
-                    # ==== Total - v2.2.5 - 0.50 ====
+
+                    # ===== SSD - v2.2.5 - 0.75 =====
+                    # Detections               : 1213
+                    # Total False Detections   : 3
+                    # Successful Detections    : 1210
+                    # Total objects            : 1365
+                    # True Accuracy            : 0.89
+                    # Effective Accuracy       : 0.88
+                    # ========== Data - v2 ==========
+
+                    # ===== SSD - v2.2.5 - 0.50 =====
                     # Detections               : 1291
                     # Total False Detections   : 8
                     # Successful Detections    : 1283
                     # Total objects            : 1365
                     # True Accuracy            : 0.94
                     # Effective Accuracy       : 0.93
-                    # ===============================
+                    # ========== Data - v2 ==========
 
-                        # Data: v3
-                        # ==== Total - v2.2.5 - 0.50 ====
-                        # Detections               : 2637
-                        # Total False Detections   : 363
-                        # Successful Detections    : 2274
-                        # Total objects            : 2607
-                        # True Accuracy            : 0.87
-                        # Effective Accuracy       : 0.73
-                        # ===============================
+                    # ===== SSD - v2.2.5 - 0.25 =====
+                    # Detections               : 1359
+                    # Total False Detections   : 18
+                    # Successful Detections    : 1341
+                    # Total objects            : 1365
+                    # True Accuracy            : 0.98
+                    # Effective Accuracy       : 0.97
+                    # ========== Data - v2 ==========
+
+                    # ==== Total - v2.2.5 - 0.50 ====
+                    # Detections               : 2637
+                    # Total False Detections   : 363
+                    # Successful Detections    : 2274
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.87
+                    # Effective Accuracy       : 0.73
+                    # ========== Data - v3 ==========
+
+                    # ===== SSD - v2.2.5 - 0.25 =====
+                    # Detections               : 2924
+                    # Total False Detections   : 500
+                    # Successful Detections    : 2424
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.93
+                    # Effective Accuracy       : 0.74
+                    # ========== Data - v3 ==========
 
                 "ssd_mobilenet_v2.3.0",
                     # ======= Total - v2.3.0  =======
@@ -325,13 +365,13 @@ vImages        = glob.glob(PATH_TO_V_IMAGES)
 if args.dataCLA == 0:
     IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES) + glob.glob(PATH_TO_V_IMAGES)
     XML = glob.glob(PATH_TO_TRAIN_XML) + glob.glob(PATH_TO_TEST_XML) + glob.glob(PATH_TO_V_XML)
-if args.dataCLA == "verification":
+if args.dataCLA == "ve":
     IMAGES = glob.glob(PATH_TO_V_IMAGES)
     XML = glob.glob(PATH_TO_V_XML)
-if args.dataCLA == "train":
+if args.dataCLA == "tr":
     IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES)
     XML = glob.glob(PATH_TO_TRAIN_XML)
-if args.dataCLA == "test":
+if args.dataCLA == "te":
     IMAGES = glob.glob(PATH_TO_TEST_IMAGES)
     XML = glob.glob(PATH_TO_TEST_XML)
 if args.dataCLA == "v1":
@@ -512,14 +552,15 @@ else:
     trueAcc = 0
     effectiveAcc = 0
 
-print("\n======== Verification ======== ")
-print("Detections               :", vDetections)
-print("Testing False Detections :", vFalseDetections)
-print("Successful Detections    :", vDetections - vFalseDetections)
-print("Total objects            :", vObjects)
-print("True Accuracy            :", trueAcc)
-print("Effective Accuracy       :", effectiveAcc)
-print("=============================== ")
+if vObjects > 0:
+    print("\n======== Verification ======== ")
+    print("Detections               :", vDetections)
+    print("Testing False Detections :", vFalseDetections)
+    print("Successful Detections    :", vDetections - vFalseDetections)
+    print("Total objects            :", vObjects)
+    print("True Accuracy            :", trueAcc)
+    print("Effective Accuracy       :", effectiveAcc)
+    print("=============================== ")
 
 if testingObjects > 0:
     trueAcc = max(0, round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2))
@@ -528,19 +569,20 @@ else:
     trueAcc = 0
     effectiveAcc = 0
 
-print("\n=========== Testing =========== ")
-print("Detections               :", testingDetections)
-print("Testing False Detections :", falseNumberDetectionTesting)
-print("Successful Detections    :", testingDetections - falseNumberDetectionTesting)
-print("Total objects            :", testingObjects)
-print("True Accuracy            :", trueAcc)
-print("Effective Accuracy       :", effectiveAcc)
-print("=============================== ")
+if testingObjects > 0:
+    print("\n=========== Testing =========== ")
+    print("Detections               :", testingDetections)
+    print("Testing False Detections :", falseNumberDetectionTesting)
+    print("Successful Detections    :", testingDetections - falseNumberDetectionTesting)
+    print("Total objects            :", testingObjects)
+    print("True Accuracy            :", trueAcc)
+    print("Effective Accuracy       :", effectiveAcc)
+    print("=============================== ")
 
 if MODEL_NAME.split("_")[0] == "ssd":
-    print("\n==== Total -", MODEL_NAME.split("_")[2], "- {:0.2f} ==== ".format(THRESH))
+    print("\n===== SSD -", MODEL_NAME.split("_")[2], "- {:0.2f} ===== ".format(THRESH))
 else:
-    print("\n==== Total -", MODEL_NAME.split("_")[1], "- {:0.2f} ==== ".format(THRESH))
+    print("\n==== FRCNN -", MODEL_NAME.split("_")[1], "- {:0.2f} ==== ".format(THRESH))
 
 print("Detections               :", totalDetections)
 print("Total False Detections   :", falseNumberDetection)
@@ -548,7 +590,11 @@ print("Successful Detections    :", totalDetections - falseNumberDetection)
 print("Total objects            :", totalObjects)
 print("True Accuracy            :", max(0, round((totalDetections - falseNumberDetection) / totalObjects, 2)))
 print("Effective Accuracy       :", max(0, round((totalDetections - falseNumberDetection * 2) / totalObjects, 2)))
-print("=============================== ")
+
+if args.dataCLA == 0:
+    print("====== Data - All Images ======")
+else:
+    print("========== Data -", args.dataCLA, "==========")
 
 print("\n======= False Positives =======")
 if args.fpCLA != "False":
