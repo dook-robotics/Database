@@ -12,6 +12,10 @@ from utils import visualization_utils as vis_util
 import time
 import math
 
+# python accuracy.py -m ssd_mobilenet_v2.2.6 -d v1
+# python accuracy.py -m 10 -d verification -savefp
+# python accuracy.py -save
+
 # Add command line arguments
 parser = argparse.ArgumentParser(
                                  description = 'Dook Robotics - Model Accuracy Script',
@@ -70,10 +74,46 @@ THRESH = 0.5
 BASE   = "D:/Models/poop/inference_graphs"
 LABELS = "D:/Models/poop/labelmap.pbtxt"
 MODEL_NAMES  =  [
-                "faster_rcnn_inception_v2_pets_v1",
-                "ssd_mobilenet_v2_0052_v1", # 0.98 (v1 of database)
-                "ssd_mobilenet_v2_0037_v2", # 0.97 (v1 of database)
-                "ssd_mobilenet_v2_0037_v3", # 0.95 (v1 of database)
+                "frcnn_v2.1.0",
+                    # ==== Total - v2.1.0 - 0.50 ====
+                    # Detections               : 766
+                    # Total False Detections   : 0
+                    # Successful Detections    : 766
+                    # Total objects            : 767
+                    # True Accuracy            : 1.0
+                    # Effective Accuracy       : 1.0
+                    # ===============================
+
+                "ssd_mobilenet_v2.1.0",
+                    # ==== Total - v2.1.0 - 0.50 ====
+                    # Detections               : 748
+                    # Total False Detections   : 0
+                    # Successful Detections    : 748
+                    # Total objects            : 767
+                    # True Accuracy            : 0.98
+                    # Effective Accuracy       : 0.98
+                    # ===============================
+
+                "ssd_mobilenet_v2.1.1",
+                    # ==== Total - v2.1.1 - 0.50 ====
+                    # Detections               : 745
+                    # Total False Detections   : 0
+                    # Successful Detections    : 745
+                    # Total objects            : 767
+                    # True Accuracy            : 0.97
+                    # Effective Accuracy       : 0.97
+                    # ===============================
+
+                "ssd_mobilenet_v2.1.2",
+                    # ==== Total - v2.1.2 - 0.50 ====
+                    # Detections               : 727
+                    # Total False Detections   : 0
+                    # Successful Detections    : 727
+                    # Total objects            : 767
+                    # True Accuracy            : 0.95
+                    # Effective Accuracy       : 0.95
+                    # ===============================
+
                 "ssd_mobilenet_v2_v4", # 0.94 (v1 of database)
                 # ssd_mobilenet_v2_datav2_v1 96% overall #1386 Detections #38 False positives #15 Missed Objects
                 "ssd_mobilenet_v2_datav2_v1",
@@ -87,104 +127,115 @@ MODEL_NAMES  =  [
                 "ssd_mobilenet_v2_datav2_v4",
                  # ssd_mobilenet_v2.2.5 Terrible soo many high confidence false detections
                 "ssd_mobilenet_v2.2.5",
-                # ssd_mobilenet_v2.2.6 (0.6 thresh)  93% overall #1274 Detections #4 False positives #95 Missed Objects
-                # ssd_mobilenet_v2.2.6 (0.5 thresh)  95% overall #1291 Detections #8 False positives #82 Missed Objects
-                # On version database v3
-                # ======= Total - v2.2.6  =======
-                # Detections               : 2637
-                # Total False Detections   : 363
-                # Successful Detections    : 2274
-                # Total objects            : 2607
-                # True Accuracy            : 0.87
-                # Effective Accuracy       : 0.73
-                # ===============================
+
                 "ssd_mobilenet_v2.2.6", #10
-                # ======= Total - v2.3.0  =======
-                # Detections               : 1973
-                # Total False Detections   : 30
-                # Successful Detections    : 1943
-                # Total objects            : 2607
-                # True Accuracy            : 0.75
-                # Effective Accuracy       : 0.73
-                # ===============================
+                    # ssd_mobilenet_v2.2.6 (0.6 thresh)  93% overall #1274 Detections #4 False positives #95 Missed Objects
+                    # ssd_mobilenet_v2.2.6 (0.5 thresh)  95% overall #1291 Detections #8 False positives #82 Missed Objects
+                    # On version database v3
+                    # ======= Total - v2.2.6  =======
+                    # Detections               : 2637
+                    # Total False Detections   : 363
+                    # Successful Detections    : 2274
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.87
+                    # Effective Accuracy       : 0.73
+                    # ===============================
+
                 "ssd_mobilenet_v2.3.0",
-                # ======= Total - v2.3.1  =======
-                # Detections               : 1628
-                # Total False Detections   : 19
-                # Successful Detections    : 1609
-                # Total objects            : 2607
-                # True Accuracy            : 0.62
-                # Effective Accuracy       : 0.61
-                # ===============================
+                    # ======= Total - v2.3.0  =======
+                    # Detections               : 1973
+                    # Total False Detections   : 30
+                    # Successful Detections    : 1943
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.75
+                    # Effective Accuracy       : 0.73
+                    # ===============================
+
                 "ssd_mobilenet_v2.3.1",
-                # ======= Total - v2.3.2  =======
-                # Detections               : 1528
-                # Total False Detections   : 40
-                # Successful Detections    : 1488
-                # Total objects            : 2607
-                # True Accuracy            : 0.57
-                # Effective Accuracy       : 0.56
-                # ===============================
+                    # ======= Total - v2.3.1  =======
+                    # Detections               : 1628
+                    # Total False Detections   : 19
+                    # Successful Detections    : 1609
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.62
+                    # Effective Accuracy       : 0.61
+                    # ===============================
+
                 "ssd_mobilenet_v2.3.2",
-                # ==== Total - v2.3.3 - 0.25 ====
-                # Detections               : 2268
-                # Total False Detections   : 165
-                # Successful Detections    : 2103
-                # Total objects            : 2607
-                # True Accuracy            : 0.81
-                # Effective Accuracy       : 0.74
-                # ===============================
-                # ==== Total - v2.3.3 - 0.50 ====
-                # Detections               : 2067
-                # Total False Detections   : 117
-                # Successful Detections    : 1950
-                # Total objects            : 2607
-                # True Accuracy            : 0.75
-                # Effective Accuracy       : 0.7
-                # ===============================
+                    # ======= Total - v2.3.2  =======
+                    # Detections               : 1528
+                    # Total False Detections   : 40
+                    # Successful Detections    : 1488
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.57
+                    # Effective Accuracy       : 0.56
+                    # ===============================
+
                 "ssd_mobilenet_v2.3.3",
-                # ==== Total - v2.3.4 - 0.25 ====
-                # Detections               : 1895
-                # Total False Detections   : 65
-                # Successful Detections    : 1830
-                # Total objects            : 2607
-                # True Accuracy            : 0.7
-                # Effective Accuracy       : 0.68
-                # ===============================
-                # ==== Total - v2.3.4 - 0.50 ====
-                # Detections               : 1752
-                # Total False Detections   : 51
-                # Successful Detections    : 1701
-                # Total objects            : 2607
-                # True Accuracy            : 0.65
-                # Effective Accuracy       : 0.63
-                # ===============================
+                    # ==== Total - v2.3.3 - 0.25 ====
+                    # Detections               : 2268
+                    # Total False Detections   : 165
+                    # Successful Detections    : 2103
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.81
+                    # Effective Accuracy       : 0.74
+                    # ===============================
+                    # ==== Total - v2.3.3 - 0.50 ====
+                    # Detections               : 2067
+                    # Total False Detections   : 117
+                    # Successful Detections    : 1950
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.75
+                    # Effective Accuracy       : 0.7
+                    # ===============================
+
                 "ssd_mobilenet_v2.3.4",
-                # ==== Total - v2.3.0 - 0.50 ====
-                # Detections               : 2451
-                # Total False Detections   : 56
-                # Successful Detections    : 2395
-                # Total objects            : 2607
-                # True Accuracy            : 0.92
-                # Effective Accuracy       : 0.9
-                # ===============================
+                    # ==== Total - v2.3.4 - 0.25 ====
+                    # Detections               : 1895
+                    # Total False Detections   : 65
+                    # Successful Detections    : 1830
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.7
+                    # Effective Accuracy       : 0.68
+                    # ===============================
+                    # ==== Total - v2.3.4 - 0.50 ====
+                    # Detections               : 1752
+                    # Total False Detections   : 51
+                    # Successful Detections    : 1701
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.65
+                    # Effective Accuracy       : 0.63
+                    # ===============================
+
                 "frcnn_v2.3.0",
-                # ==== Total - v2.3.1 - 0.50 ====
-                # Detections               : 2146
-                # Total False Detections   : 27
-                # Successful Detections    : 2119
-                # Total objects            : 2607
-                # True Accuracy            : 0.81
-                # Effective Accuracy       : 0.8
-                # ===============================
+                    # ==== Total - v2.3.0 - 0.50 ====
+                    # Detections               : 2451
+                    # Total False Detections   : 56
+                    # Successful Detections    : 2395
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.92
+                    # Effective Accuracy       : 0.9
+                    # ===============================
+
                 "frcnn_v2.3.1"
+                    # ==== Total - v2.3.1 - 0.50 ====
+                    # Detections               : 2146
+                    # Total False Detections   : 27
+                    # Successful Detections    : 2119
+                    # Total objects            : 2607
+                    # True Accuracy            : 0.81
+                    # Effective Accuracy       : 0.8
+                    # ===============================
                 ]
 
 # Choose a model
-if int(args.modelCLA) >= 0:
-    MODEL_NAME = MODEL_NAMES[int(args.modelCLA)]
+if "." in args.modelCLA:
+    MODEL_NAME = args.modelCLA
 else:
-    MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
+    if int(args.modelCLA) >= 0:
+        MODEL_NAME = MODEL_NAMES[int(args.modelCLA)]
+    else:
+        MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
 
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
