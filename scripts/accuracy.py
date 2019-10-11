@@ -391,19 +391,22 @@ trainingImages = glob.glob(PATH_TO_TRAIN_IMAGES)
 testingImages  = glob.glob(PATH_TO_TEST_IMAGES)
 vImages        = glob.glob(PATH_TO_V_IMAGES)
 
-# Grab all images
+# Grab images
 if args.dataCLA == 0:
     IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES) + glob.glob(PATH_TO_V_IMAGES)
     XML    = glob.glob(PATH_TO_TRAIN_XML)    + glob.glob(PATH_TO_TEST_XML)    + glob.glob(PATH_TO_V_XML)
 if args.dataCLA == "ve":
     IMAGES = glob.glob(PATH_TO_V_IMAGES)
     XML    = glob.glob(PATH_TO_V_XML)
+
 if args.dataCLA == "tr":
     IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES)
     XML    = glob.glob(PATH_TO_TRAIN_XML)
+
 if args.dataCLA == "te":
     IMAGES = glob.glob(PATH_TO_TEST_IMAGES)
     XML    = glob.glob(PATH_TO_TEST_XML)
+
 if args.dataCLA == "v1":
     IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
     XML     = glob.glob(PATH_TO_SG_XML)
@@ -411,6 +414,7 @@ if args.dataCLA == "v1":
     XML    += glob.glob(PATH_TO_TR_XML)
     IMAGES += glob.glob(PATH_TO_TG_IMAGES)
     XML    += glob.glob(PATH_TO_TG_XML)
+
 if args.dataCLA == "v2":
     IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
     XML     = glob.glob(PATH_TO_SG_XML)
@@ -420,6 +424,7 @@ if args.dataCLA == "v2":
     XML    += glob.glob(PATH_TO_TG_XML)
     IMAGES += glob.glob(PATH_TO_TROCKS_IMAGES)
     XML    += glob.glob(PATH_TO_TROCKS_XML)
+
 if args.dataCLA == "v3":
     IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
     XML     = glob.glob(PATH_TO_SG_XML)
@@ -431,6 +436,7 @@ if args.dataCLA == "v3":
     XML    += glob.glob(PATH_TO_TROCKS_XML)
     IMAGES += glob.glob(PATH_TO_TROCKS2_IMAGES)
     XML    += glob.glob(PATH_TO_TROCKS2_XML)
+
 if args.dataCLA == "v4":
     IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
     XML     = glob.glob(PATH_TO_SG_XML)
