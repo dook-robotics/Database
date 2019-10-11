@@ -178,7 +178,6 @@ MODEL_NAMES  =  [
                     # ===============================
 
                 "ssd_mobilenet_v2.2.5",
-
                     # ===== SSD - v2.2.5 - 0.75 =====
                     # Detections               : 1213
                     # Total False Detections   : 3
@@ -223,6 +222,24 @@ MODEL_NAMES  =  [
                     # True Accuracy            : 0.93
                     # Effective Accuracy       : 0.74
                     # ========== Data - v3 ==========
+
+                    # ===== SSD - v2.2.5 - 0.50 =====
+                    # Detections               : 2888
+                    # Total False Detections   : 365
+                    # Successful Detections    : 2523
+                    # Total objects            : 3665
+                    # True Accuracy            : 0.69
+                    # Effective Accuracy       : 0.59
+                    # ========== Data - v4 ==========
+
+                    # ===== SSD - v2.2.5 - 0.25 =====
+                    # Detections               : 3228
+                    # Total False Detections   : 505
+                    # Successful Detections    : 2723
+                    # Total objects            : 3665
+                    # True Accuracy            : 0.74
+                    # Effective Accuracy       : 0.61
+                    # ========== Data - v4 ==========
 
                 "ssd_mobilenet_v2.3.0",
                     # ======= Total - v2.3.0  =======
@@ -292,6 +309,16 @@ MODEL_NAMES  =  [
                     # Effective Accuracy       : 0.63
                     # ===============================
 
+                "ssd_mobilenet_v2.4.0",
+                    # ===== SSD - v2.4.0 - 0.50 =====
+                    # Detections               : 3291
+                    # Total False Detections   : 717
+                    # Successful Detections    : 2574
+                    # Total objects            : 3665
+                    # True Accuracy            : 0.7
+                    # Effective Accuracy       : 0.51
+                    # ====== Data - All Images ======
+
                 "frcnn_v2.1.0",
                     # ==== Total - v2.1.0 - 0.50 ====
                     # Detections               : 766
@@ -324,13 +351,14 @@ MODEL_NAMES  =  [
                 ]
 
 # Choose a model
-if "." in args.modelCLA:
-    MODEL_NAME = args.modelCLA
+if args.modelCLA == -1:
+    MODEL_NAME = MODEL_NAMES[9]
 else:
-    if int(args.modelCLA) >= 0:
-        MODEL_NAME = MODEL_NAMES[int(args.modelCLA)]
+    if "." in args.modelCLA:
+        MODEL_NAME = args.modelCLA
     else:
-        MODEL_NAME = MODEL_NAMES[len(MODEL_NAMES) - 1]
+        if int(args.modelCLA) >= 0:
+            MODEL_NAME = MODEL_NAMES[int(args.modelCLA)]
 
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
@@ -351,6 +379,8 @@ PATH_TO_TROCKS_IMAGES  = "D:/Database/reduced/all/images/trippleRocks/*.jpg"
 PATH_TO_TROCKS_XML     = "D:/Database/reduced/all/xml/trippleRocks/*.xml"
 PATH_TO_TROCKS2_IMAGES = "D:/Database/reduced/all/images/trippleRocks2/*.jpg"
 PATH_TO_TROCKS2_XML    = "D:/Database/reduced/all/xml/trippleRocks2/*.xml"
+PATH_TO_TGRASS_IMAGES  = "D:/Database/reduced/all/images/trippleGrass/*.jpg"
+PATH_TO_TGRASS_XML     = "D:/Database/reduced/all/xml/trippleGrass/*.xml"
 OUTPUT                 = "D:/Database/tests/*"
 NUM_CLASSES            = 1
 
@@ -364,16 +394,16 @@ vImages        = glob.glob(PATH_TO_V_IMAGES)
 # Grab all images
 if args.dataCLA == 0:
     IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES) + glob.glob(PATH_TO_V_IMAGES)
-    XML = glob.glob(PATH_TO_TRAIN_XML) + glob.glob(PATH_TO_TEST_XML) + glob.glob(PATH_TO_V_XML)
+    XML    = glob.glob(PATH_TO_TRAIN_XML)    + glob.glob(PATH_TO_TEST_XML)    + glob.glob(PATH_TO_V_XML)
 if args.dataCLA == "ve":
     IMAGES = glob.glob(PATH_TO_V_IMAGES)
-    XML = glob.glob(PATH_TO_V_XML)
+    XML    = glob.glob(PATH_TO_V_XML)
 if args.dataCLA == "tr":
     IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES)
-    XML = glob.glob(PATH_TO_TRAIN_XML)
+    XML    = glob.glob(PATH_TO_TRAIN_XML)
 if args.dataCLA == "te":
     IMAGES = glob.glob(PATH_TO_TEST_IMAGES)
-    XML = glob.glob(PATH_TO_TEST_XML)
+    XML    = glob.glob(PATH_TO_TEST_XML)
 if args.dataCLA == "v1":
     IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
     XML     = glob.glob(PATH_TO_SG_XML)
@@ -401,6 +431,19 @@ if args.dataCLA == "v3":
     XML    += glob.glob(PATH_TO_TROCKS_XML)
     IMAGES += glob.glob(PATH_TO_TROCKS2_IMAGES)
     XML    += glob.glob(PATH_TO_TROCKS2_XML)
+if args.dataCLA == "v4":
+    IMAGES  = glob.glob(PATH_TO_SG_IMAGES)
+    XML     = glob.glob(PATH_TO_SG_XML)
+    IMAGES += glob.glob(PATH_TO_TR_IMAGES)
+    XML    += glob.glob(PATH_TO_TR_XML)
+    IMAGES += glob.glob(PATH_TO_TG_IMAGES)
+    XML    += glob.glob(PATH_TO_TG_XML)
+    IMAGES += glob.glob(PATH_TO_TROCKS_IMAGES)
+    XML    += glob.glob(PATH_TO_TROCKS_XML)
+    IMAGES += glob.glob(PATH_TO_TROCKS2_IMAGES)
+    XML    += glob.glob(PATH_TO_TROCKS2_XML)
+    IMAGES += glob.glob(PATH_TO_TGRASS_IMAGES)
+    XML    += glob.glob(PATH_TO_TGRASS_XML)
 
 # Clean output folder
 OUTPUT_FILES = glob.glob(OUTPUT)
@@ -408,8 +451,8 @@ for file in OUTPUT_FILES:
     os.remove(file)
 
 # Load labels and categories
-label_map = label_map_util.load_labelmap(LABELS)
-categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
+label_map      = label_map_util.load_labelmap(LABELS)
+categories     = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
 # Load tensorflow model
@@ -423,20 +466,20 @@ with detection_graph.as_default():
     sess = tf.Session(graph=detection_graph)
 
 # Define inputs and outputs
-image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
+image_tensor      = detection_graph.get_tensor_by_name('image_tensor:0')
+detection_boxes   = detection_graph.get_tensor_by_name('detection_boxes:0')
+detection_scores  = detection_graph.get_tensor_by_name('detection_scores:0')
 detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
-num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+num_detections    = detection_graph.get_tensor_by_name('num_detections:0')
 
-totalDetections = 0
-totalObjects = 0
-testingObjects = 0
-testingDetections = 0
-vObjects = 0
-vDetections = 0
-vFalseDetections = 0
-falseNumberDetection = 0
+totalDetections             = 0
+totalObjects                = 0
+testingObjects              = 0
+testingDetections           = 0
+vObjects                    = 0
+vDetections                 = 0
+vFalseDetections            = 0
+falseNumberDetection        = 0
 falseNumberDetectionTesting = 0
 
 falsePositiveImages = []
@@ -447,22 +490,22 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
     for xmlIndex, image in enumerate(IMAGES):
 
         isTestImage = False
+        isVImage    = False
+
         if image in testingImages:
             isTestImage = True
 
-        isVImage = False
         if image in vImages:
             isVImage = True
 
         # Get image name
         image = image.replace("\\","/")
-        name = image.split("/")
-        name = name[len(name) - 1]
+        name  = image.split("/")
+        name  = name[len(name) - 1]
 
         xml_file = XML[xmlIndex]
-        tree = ET.parse(xml_file)
-        root = tree.getroot()
-
+        tree     = ET.parse(xml_file)
+        root     = tree.getroot()
 
         for menber in root.findall('object'):
             totalObjects = totalObjects + 1
@@ -480,7 +523,7 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
             [detection_boxes, detection_scores, detection_classes, num_detections],
             feed_dict={image_tensor: image_expanded})
 
-        numberDetection = 0;
+        numberDetection = 0
         printPictureFP = False
         for index, box in enumerate(np.squeeze(boxes)):
             ymin = int((box[0]*IM_HEIGHT))
@@ -534,7 +577,6 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
                 min_score_thresh=THRESH)
 
             # Write to output
-
             cv2.imwrite('D:/Database/tests/test' + name, image)
         bar.update(xmlIndex)
 
@@ -546,10 +588,10 @@ else:
 print("Threshold :", THRESH)
 
 if vObjects > 0:
-    trueAcc = max(0, round((vDetections - vFalseDetections) / vObjects, 2))
+    trueAcc      = max(0, round((vDetections - vFalseDetections) / vObjects, 2))
     effectiveAcc = max(0, round((vDetections - vFalseDetections * 2) / vObjects, 2))
 else:
-    trueAcc = 0
+    trueAcc      = 0
     effectiveAcc = 0
 
 if vObjects > 0:
@@ -563,10 +605,10 @@ if vObjects > 0:
     print("=============================== ")
 
 if testingObjects > 0:
-    trueAcc = max(0, round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2))
+    trueAcc      = max(0, round((testingDetections - falseNumberDetectionTesting) / testingObjects, 2))
     effectiveAcc = max(0, round((testingDetections - falseNumberDetectionTesting * 2) / testingObjects, 2))
 else:
-    trueAcc = 0
+    trueAcc      = 0
     effectiveAcc = 0
 
 if testingObjects > 0:
