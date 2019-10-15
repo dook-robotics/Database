@@ -67,7 +67,7 @@ parser.add_argument(
                      dest    = 'threshCLA',
                      action  = 'store',
                      default = 0.5,
-                     help    = 'Select a version of the database.'
+                     help    = 'Set Threshold value.'
                     )
 
 
