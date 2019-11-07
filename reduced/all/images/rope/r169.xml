@@ -1,7 +1,7 @@
 <annotation>
 	<folder>rope</folder>
-	<filename>r0.jpg</filename>
-	<path>C:\Users\mikian.musser\Documents\GitHub\Database\reduced\all\images\rope\r0.jpg</path>
+	<filename>r169.jpg</filename>
+	<path>C:\Users\mikian.musser\Documents\GitHub\Database\reduced\all\images\rope\r169.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -18,9 +18,9 @@
 		<difficult>0</difficult>
 		<bndbox>
 			<xmin>1</xmin>
-			<ymin>1</ymin>
-			<xmax>694</xmax>
-			<ymax>56</ymax>
+			<ymin>79</ymin>
+			<xmax>168</xmax>
+			<ymax>539</ymax>
 		</bndbox>
 	</object>
 </annotation>
