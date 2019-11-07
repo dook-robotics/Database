@@ -15,7 +15,7 @@ for file in images:
     name = src.split('/')
     folder = name[len(name) - 2]
     name = name[len(name) - 1]
-    if not "sg" in name and not "t" in name and not "tg" in name and not "tr" in name and not "trtwo" in name and not "tgrass" in name:
+    if not "sg" in name and not "t" in name and not "tg" in name and not "tr" in name and not "trtwo" in name and not "tgrass" in name and not "r" in name and not "rp" in name and not "rptwo" in name:
         dst = src
         if(folder == "singleGrid"):
             dst = dst.replace(name, "sg" + name)
@@ -29,6 +29,12 @@ for file in images:
             dst = dst.replace(name, "trtwo" + name)
         if(folder == "trippleGrass"):
             dst = dst.replace(name, "tgrass" + name)
+        if(folder == "rope"):
+            dst = dst.replace(name, "r" + name)
+        if(folder == "ropePoop"):
+            dst = dst.replace(name, "rp" + name)
+        if(folder == "ropePoop2"):
+            dst = dst.replace(name, "rptwo" + name)
         os.rename(src, dst)
         count = count + 1
         print(dst)
