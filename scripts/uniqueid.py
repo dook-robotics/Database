@@ -1,5 +1,6 @@
 # python uniqueid.py D:/Database/reduced/all/images/*/*
 # python uniqueid.py D:/Database/reduced/all/xml/*/*
+# python uniqueid.py C:/Users/bobar/Documents/GitHub/Database/reduced/all/images/*/*
 
 import glob
 import os
@@ -35,6 +36,10 @@ for file in images:
             dst = dst.replace(name, "rp" + name)
         if(folder == "ropePoop2"):
             dst = dst.replace(name, "rptwo" + name)
+        if(folder == "ropePoop3"):
+            dst = dst.replace(name, "rpthree" + name)
+        if(folder == "ropePoop4"):
+            dst = dst.replace(name, "rpfour" + name)
         os.rename(src, dst)
         count = count + 1
         print(dst)
