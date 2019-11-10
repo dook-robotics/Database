@@ -79,10 +79,13 @@ def reset():
         pass
 
     print("Files moved to train          :", imageCount)
+
 # TO-DO replace this with label map
 def class_text_to_int(row_label):
     if row_label == 'poop':
         return 1
+    if row_label == 'rope':
+        return 2
     else:
         None
 
@@ -155,16 +158,18 @@ def xml_to_csv(path):
             dirs = xml_file.replace('\\', '/').split('/')
             dirs = dirs[len(dirs) - 1].split('.')[0] + ".jpg"
             # root.find('filename').text
-            value = (dirs,
-                     int(root.find('size')[0].text),
-                     int(root.find('size')[1].text),
-                     member[0].text,
-                     int(member[4][0].text),
-                     int(member[4][1].text),
-                     int(member[4][2].text),
-                     int(member[4][3].text)
-                     )
-            xml_list.append(value)
+            if(member):
+                value = (dirs,
+                    int(root.find('size')[0].text),
+                    int(root.find('size')[1].text),
+                    member[0].text,
+                    int(member[4][0].text),
+                    int(member[4][1].text),
+                    int(member[4][2].text),
+                    int(member[4][3].text)
+                )
+                xml_list.append(value)
+
     column_name = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
     xml_df = pd.DataFrame(xml_list, columns=column_name)
     return xml_df
@@ -202,13 +207,13 @@ for file in verification:
     shutil.move(verification[countv], verification[countv].replace('verification', 'train'))
     countv = countv + 1
 
-trainImages = glob.glob("D:/Database/reduced/train/*.jpg")
-trainXML = glob.glob("D:/Database/reduced/train/*.xml")
-
-print("\nImages moved from test to train         :", int(counttest/2))
 print("Images moved from verification to train :", int(countv/2))
 print("\nImages in train folder                  :", len(trainImages))
 print("XML in train folder                     :", len(trainXML))
+
+# reset()
+trainImages = glob.glob("D:/Database/reduced/train/*.jpg")
+trainXML = glob.glob("D:/Database/reduced/train/*.xml")
 
 testSize         = int(splitTest * len(trainImages))
 verificationSize = int(splitV * len(trainImages))
