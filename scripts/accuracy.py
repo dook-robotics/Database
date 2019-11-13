@@ -67,7 +67,7 @@ parser.add_argument(
                      dest    = 'threshCLA',
                      action  = 'store',
                      default = 0.5,
-                     help    = 'Set Threshold value.'
+                     help    = 'Select a version of the database.'
                     )
 
 
@@ -404,6 +404,70 @@ MODEL_NAMES  =  [
                     # Effective Accuracy       : 0.67
                     # ====== Data - All Images ======
 
+                "ssd_mobilenet_v2.4.5",
+                    # ===== SSD - v2.4.5 - 0.50 =====
+                    # Detections               : 2234
+                    # Total False Detections   : 36
+                    # Successful Detections    : 2198
+                    # Total objects            : 3665
+                    # True Accuracy            : 0.6
+                    # Effective Accuracy       : 0.59
+                    # ====== Data - All Images ======
+
+                    # ===== SSD - v2.4.5 - 0.10 =====
+                    # Detections               : 2906
+                    # Total False Detections   : 287
+                    # Successful Detections    : 2619
+                    # Total objects            : 3665
+                    # True Accuracy            : 0.71
+                    # Effective Accuracy       : 0.64
+                    # ====== Data - All Images ======
+
+                    # ===== SSD - v2.4.5 - 0.01 =====
+                    # Detections               : 3580
+                    # Total False Detections   : 620
+                    # Successful Detections    : 2960
+                    # Total objects            : 3665
+                    # True Accuracy            : 0.81
+                    # Effective Accuracy       : 0.64
+                    # ====== Data - All Images ======
+
+                "ssd_mobilenet_v2.5.0",
+
+
+                "ssd_mobilenet_v2.5.1",
+
+                    # ===== SSD - v2.5.1 - 0.20 =====
+                    # Detections               : 2199
+                    # Total False Detections   : 53
+                    # Successful Detections    : 2146
+                    # Total objects            : 2349
+                    # True Accuracy            : 0.91
+                    # Effective Accuracy       : 0.89
+                    # ====== Data - All Images ======
+
+                "ssd_mobilenet_v2.5.4",
+
+                    # ===== SSD - v2.5.4 - 0.30 =====
+                    # Detections               : 2257
+                    # Total False Detections   : 49
+                    # Successful Detections    : 2208
+                    # Total objects            : 2349
+                    # True Accuracy            : 0.94
+                    # Effective Accuracy       : 0.92
+                    # ====== Data - All Images ======
+
+                "ssd_mobilenet_v2.5.5",
+
+                    # ===== SSD - v2.5.5 - 0.30 =====
+                    # Detections               : 2368
+                    # Total False Detections   : 119
+                    # Successful Detections    : 2249
+                    # Total objects            : 2349
+                    # True Accuracy            : 0.96
+                    # Effective Accuracy       : 0.91
+                    # ====== Data - All Images ======
+
                 "frcnn_v2.1.0",
                     # ==== Total - v2.1.0 - 0.50 ====
                     # Detections               : 766
@@ -467,7 +531,7 @@ PATH_TO_TROCKS2_XML    = "D:/Database/reduced/all/xml/trippleRocks2/*.xml"
 PATH_TO_TGRASS_IMAGES  = "D:/Database/reduced/all/images/trippleGrass/*.jpg"
 PATH_TO_TGRASS_XML     = "D:/Database/reduced/all/xml/trippleGrass/*.xml"
 OUTPUT                 = "D:/Database/tests/*"
-NUM_CLASSES            = 1
+NUM_CLASSES            = 2
 
 IM_WIDTH  = 960
 IM_HEIGHT = 540
@@ -575,6 +639,9 @@ falseNumberDetectionTesting = 0
 
 falsePositiveImages = []
 
+ropeCount = 0
+
+
 # Run the model on every image
 os.system('cls')
 with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
@@ -613,6 +680,8 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
         (boxes, scores, classes, num) = sess.run(
             [detection_boxes, detection_scores, detection_classes, num_detections],
             feed_dict={image_tensor: image_expanded})
+        # print(classes)
+        # print(scores)
 
         numberDetection = 0
         printPictureFP = False
@@ -670,6 +739,7 @@ with progressbar.ProgressBar(max_value=len(IMAGES)) as bar:
             # Write to output
             cv2.imwrite('D:/Database/tests/test' + name, image)
         bar.update(xmlIndex)
+#print(ropeCount)
 
 print("\nModel     :", MODEL_NAME)
 if args.dataCLA == 0:
