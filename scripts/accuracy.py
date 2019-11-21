@@ -446,26 +446,48 @@ MODEL_NAMES  =  [
                     # Effective Accuracy       : 0.89
                     # ====== Data - All Images ======
 
-                "ssd_mobilenet_v2.5.4",
+                "ssd_mobilenet_v2.5.4", # 96% Accurate
 
                     # ===== SSD - v2.5.4 - 0.30 =====
                     # Detections               : 2257
-                    # Total False Detections   : 49
+                    # Total False Detections   : 49     (3)
                     # Successful Detections    : 2208
                     # Total objects            : 2349
                     # True Accuracy            : 0.94
                     # Effective Accuracy       : 0.92
                     # ====== Data - All Images ======
 
-                "ssd_mobilenet_v2.5.5",
+                "ssd_mobilenet_v2.5.5", # 98% Accurate
 
                     # ===== SSD - v2.5.5 - 0.30 =====
                     # Detections               : 2368
-                    # Total False Detections   : 119
+                    # Total False Detections   : 119  (50)
                     # Successful Detections    : 2249
                     # Total objects            : 2349
                     # True Accuracy            : 0.96
                     # Effective Accuracy       : 0.91
+                    # ====== Data - All Images ======
+
+                "ssd_mobilenet_v2.5.6",
+
+                    # ===== SSD - v2.5.6 - 0.30 =====
+                    # Detections               : 2177
+                    # Total False Detections   : 43
+                    # Successful Detections    : 2134
+                    # Total objects            : 2349
+                    # True Accuracy            : 0.91
+                    # Effective Accuracy       : 0.89
+                    # ====== Data - All Images ======
+
+                "ssd_mobilenet_v2.5.7",
+
+                    # ===== SSD - v2.5.7 - 0.30 =====
+                    # Detections               : 2229
+                    # Total False Detections   : 62
+                    # Successful Detections    : 2167
+                    # Total objects            : 2349
+                    # True Accuracy            : 0.92
+                    # Effective Accuracy       : 0.9
                     # ====== Data - All Images ======
 
                 "frcnn_v2.1.0",
